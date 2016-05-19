@@ -59,5 +59,12 @@ namespace SessionLogin.Areas.Admin.Controllers
                 return RedirectToAction("Login");
             }
         }
+
+        /* Denne action skal køres igennem et normalt link (a tag) på admin siden */
+        public ActionResult Logout()
+        {
+            Session["UserLoggedIn"] = null;
+            return Redirect("/Home/Index");
+        }
     }
 }
