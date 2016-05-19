@@ -30,6 +30,14 @@
                         <input type="submit" value="Login" class="form-control" />
                     </td>
                 </tr>
+                @if (TempData["MSG"] != null)
+                {
+                    <tr>
+                        <td colspan="2">
+                            <p style="color:red;">@TempData["MSG"]</p>
+                        </td>
+                    </tr>
+                }
             </table>
         </form>
     </div>
