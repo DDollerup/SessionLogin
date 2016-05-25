@@ -1,0 +1,26 @@
+﻿
+@{
+    ViewBag.Title = "AddUser";
+}
+
+<h2>Add User</h2>
+
+<form action="/Admin/Admin/AddUserSubmit" method="post" enctype="multipart/form-data">
+    <table class="table-bordered">
+        <tr>
+            <td>
+                <input type="text" name="Username" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input type="password" name="Password" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input type="submit" name="Add" />
+            </td>
+        </tr>
+    </table>
+</form>

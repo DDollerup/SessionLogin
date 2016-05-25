@@ -5,6 +5,8 @@ using System.Web;
 using System.Web.Mvc;
 using SessionLogin.Factories;
 using SessionLogin.Models;
+using System.Security.Cryptography; // Skal bruges for at kunne få fat i klassen SHA512
+using System.Text; // Skal bruges for at kunne konvertere bytes til tekst
 
 namespace SessionLogin.Areas.Admin.Controllers
 {
@@ -46,7 +48,11 @@ namespace SessionLogin.Areas.Admin.Controllers
         [HttpPost]
         public ActionResult LoginSubmit(string username, string password)
         {
-            User userToLogin = userFac.UserLogin(username, password);
+            SHA512 typedPassword = new SHA512Managed();
+            typedPassword.ComputeHash(Encoding.ASCII.GetBytes(password));
+            string hashedPassword = BitConverter.ToString(typedPassword.Hash).Replace("-", "");
+
+            User userToLogin = userFac.UserLogin(username, hashedPassword);
 
             if (userToLogin != null)
             {
@@ -65,6 +71,26 @@ namespace SessionLogin.Areas.Admin.Controllers
         {
             Session["UserLoggedIn"] = null;
             return Redirect("/Home/Index");
+        }
+
+        public ActionResult AddUser()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult AddUserSubmit(User user)
+        {
+
+            SHA512 newPassword = new SHA512Managed();
+            newPassword.ComputeHash(Encoding.ASCII.GetBytes(user.Password));
+            string hashedPassword = BitConverter.ToString(newPassword.Hash).Replace("-", "");
+
+            user.Password = hashedPassword;
+            userFac.Add(user);
+
+
+            return RedirectToAction("Index");
         }
     }
 }
